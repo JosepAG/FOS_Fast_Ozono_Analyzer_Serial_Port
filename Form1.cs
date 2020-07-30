@@ -29,6 +29,7 @@ namespace FOS_serial_port
         int LineBaud;
         String LinePort;
         int Cont;
+        int i;
         public Form1()
         {
             InitializeComponent();
@@ -38,6 +39,7 @@ namespace FOS_serial_port
         private void Form1_Load(object sender, EventArgs e)
         {
             Cont = 0;
+            i = 0;
 
             StreamReader sw = new StreamReader("Path.txt");
             pathSave = sw.ReadLine();
@@ -206,20 +208,20 @@ namespace FOS_serial_port
         }
         private void Showdata(object sender, EventArgs e)
         {
-            
-          
-            String DateNow2 = DateNow.ToString("ss:fff ");
+            i++;
+           if (i > 3000)
+            {
+            String DateNow2 = DateNow.ToString("HH:mm:ss ");
 
             chart1.Series["Ozone"].Points.AddXY(DateNow2, OzoneNum);
-            if (chart1.Series["Ozone"].Points.Count > 10000)
+            if (chart1.Series["Ozone"].Points.Count > 565)
             {
                 chart1.Series["Ozone"].Points.RemoveAt(0);
                 chart1.ResetAutoValues();
+            }        
+                data_tb.Text = Ozone + "," + temp + "," + flowrate + "," + DateNowfff; ;
+                i = 0;
             }
-
-
-            data_tb.Text = data;
-
         }
 
         private void stop_btn_Click(object sender, EventArgs e)
