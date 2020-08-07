@@ -13,6 +13,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.Hosting;
 
+
 namespace FOS_serial_port
 {
     public partial class Form1 : Form
@@ -31,7 +32,7 @@ namespace FOS_serial_port
         int Cont;
         int i;
         int In_side;
-        String Archive;
+        String Archive="";
         public Form1()
         {
             InitializeComponent();
@@ -171,7 +172,7 @@ namespace FOS_serial_port
             }
             finally
             {
-                Console.WriteLine("Conected to " + " with " + " Baudrate");
+                Console.WriteLine("Conected to " + serialPort1.PortName + " with " + serialPort1.BaudRate + " Baudrate");
             }
         }
 
@@ -255,7 +256,7 @@ namespace FOS_serial_port
                 chart1.Series["Ozone"].Points.RemoveAt(0);
                 chart1.ResetAutoValues();
             }        
-                data_tb.Text = "O: "+ Ozone + "\r\n" + "T: "+temp + "\r\n" + "FlowR: "+flowrate + "\r\n" + "Date: "+ "\r\n" + DateNowfff; 
+                data_tb.Text = "O: "+ Ozone + "\r\n" + "T: "+temp + "\r\n" + "FlowR: "+flowrate + "\r\n" + "Date: " + DateNowfff; 
          }
         
 
@@ -303,7 +304,14 @@ namespace FOS_serial_port
 
         private void save_btn_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", pathSave + "/" + Archive);
+            if (Archive.Length < 2)
+            {
+                MessageBox.Show("File not created yet");
+            }
+            else
+            {
+                Process.Start("notepad.exe", pathSave + "/" + Archive);
+            }          
         }
 
         private void chart1_Click(object sender, EventArgs e)
