@@ -1,4 +1,3 @@
-C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.csprojAssemblyReference.cache
 C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.Form1.resources
 C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.Properties.Resources.resources
 C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.csproj.GenerateResource.cache
@@ -8,3 +7,14 @@ C:\Users\USUARIO\source\repos\FOS_serial_port\bin\Debug\FOS_serial_port.exe
 C:\Users\USUARIO\source\repos\FOS_serial_port\bin\Debug\FOS_serial_port.pdb
 C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.exe
 C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.pdb
+C:\Users\USUARIO\source\repos\FOS_serial_port\obj\Debug\FOS_serial_port.csprojAssemblyReference.cache
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\bin\Debug\FOS_serial_port.exe.config
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\bin\Debug\FOS_serial_port.exe
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\bin\Debug\FOS_serial_port.pdb
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.csprojAssemblyReference.cache
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.Form1.resources
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.Properties.Resources.resources
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.csproj.GenerateResource.cache
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.csproj.CoreCompileInputs.cache
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.exe
+C:\Users\USUARIO\Desktop\FOS_serial_port_cambiando\obj\Debug\FOS_serial_port.pdb

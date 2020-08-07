@@ -30,6 +30,8 @@ namespace FOS_serial_port
         String LinePort;
         int Cont;
         int i;
+        int In_side;
+        String Archive;
         public Form1()
         {
             InitializeComponent();
@@ -38,8 +40,19 @@ namespace FOS_serial_port
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            //timer2
+            int time = DateTime.Now.Second;
+            int time2 = 5-DateTime.Now.Minute % 5;
+            timer2.Interval = time2*60000-time * 1000;
+            timer2.Start();
+            ////
+
+
             Cont = 0;
+            //timer2.Enabled = false;
             i = 0;
+            In_side = 0;
+            File.WriteAllText("Data.txt", String.Empty);
 
             StreamReader sw = new StreamReader("Path.txt");
             pathSave = sw.ReadLine();
@@ -61,7 +74,7 @@ namespace FOS_serial_port
                     LineBaud = Int32.Parse(LineBaudS);
                     comboBox1.Text = LinePort;
                     comboBox2.Text = LineBaudS;
-                    data_tb.Text = "Wait 1 minute to load the data plot.";
+                    data_tb.Text = "Wait 5 minute to load the data plot.";
                     //data_tb2.Text = "Wait to get the 30 minutes average data plot.";
                     sr.Close();
 
@@ -169,28 +182,28 @@ namespace FOS_serial_port
 ;
             if (data.Substring(0, 1) == "0")
             {
-                Console.WriteLine("dentro 0");
-                Console.WriteLine(data);
+                //Console.WriteLine("dentro 0");
+                //Console.WriteLine(data);
                 Ozone = data.Substring(2, 8);
-                Console.WriteLine("Ozone is: "+Ozone);
+                //Console.WriteLine("Ozone is: "+Ozone);
 
             }
             if (data.Substring(0, 1) == "1")
             {
-                Console.WriteLine("dentro 1");
-                Console.WriteLine(data);
+                //Console.WriteLine("dentro 1");
+                //Console.WriteLine(data);
                 Ozone = data.Substring(2, 8);
                 flowrate = data.Substring(13, 6);
-                Console.WriteLine("Flowrate is: "+flowrate);
+                //Console.WriteLine("Flowrate is: "+flowrate);
 
             }
             if (data.Substring(0,1) == "2")
             {
-                Console.WriteLine("dentro 2");
-                Console.WriteLine(data);
+                //Console.WriteLine("dentro 2");
+                //Console.WriteLine(data);
                 Ozone = data.Substring(2, 8);                
                 temp = data.Substring(13,7);
-                Console.WriteLine("Temperature is: "+temp);
+                //Console.WriteLine("Temperature is: "+temp);
             }
             Cont = Cont + 1;
             if(Cont >= 3)
@@ -198,31 +211,53 @@ namespace FOS_serial_port
                 Cont = 3;
                 OzoneNum = float.Parse(Ozone);
                 DateNow = DateTime.Now;
-                DateNowfff = DateNow.ToString("d/MM/yyyy HH:mm:ss.fff");
+                DateNowfff = DateNow.ToString("dd/MM/yyyy HH:mm:ss.fff");
                 DataOut = Ozone + "," + temp + "," + flowrate+","+DateNowfff;
-                File.AppendAllText("Data.txt", DataOut + Environment.NewLine);
-                File.WriteAllText("DataForCsv.txt", File.ReadAllText("Headers.txt") + Environment.NewLine + File.ReadAllText("Data.txt"));
 
-                this.Invoke(new EventHandler(Showdata));
+               /* if((DateNow.Minute==00|| DateNow.Minute == 05 || DateNow.Minute == 10 || DateNow.Minute == 15 || DateNow.Minute == 20 || DateNow.Minute == 25 
+                    || DateNow.Minute == 30 || DateNow.Minute == 35 || DateNow.Minute == 40 || DateNow.Minute == 45 || DateNow.Minute == 50 || DateNow.Minute == 55)
+                    && DateNow.Second == 00)
+                {
+                    timer2.Enabled = true;
+                    timer2.Start();
+                }
+                */
+
+                if ((DateNow.Minute == 00 && DateNow.Second == 00 && DateNow.Millisecond < 300) || (DateNow.Minute == 30 && DateNow.Second == 00 && DateNow.Millisecond < 300))
+                {
+                    serialPort1.DiscardInBuffer();
+                    File.WriteAllText("Data.txt", String.Empty);
+                    Archive = "M"  + DateNow.Year.ToString()  + DateNow.DayOfYear.ToString("000")  + DateNow.Hour.ToString("00.##") + DateNow.Minute.ToString("00.##") + "_" + "FOS.txt";
+                    In_side = 1;
+
+                }
+
+                if (In_side == 1)
+                {
+                    File.AppendAllText("Data.txt", DataOut + Environment.NewLine);
+                    File.WriteAllText(Archive, File.ReadAllText("Headers.txt") + Environment.NewLine + File.ReadAllText("Data.txt"));
+                    File.WriteAllText(pathSave+"/"+Archive, File.ReadAllText("Headers.txt") + Environment.NewLine + File.ReadAllText("Data.txt"));
+                }
+
+                //this.Invoke(new EventHandler(Showdata));
             }
         }
         private void Showdata(object sender, EventArgs e)
         {
-            i++;
-           if (i > 3000)
-            {
-            String DateNow2 = DateNow.ToString("HH:mm:ss ");
+            //i++;
+            // if (i > 864)
+            //{
+            String DateNow2 = DateNow.ToString("d/M/yy HH:mm");
 
             chart1.Series["Ozone"].Points.AddXY(DateNow2, OzoneNum);
-            if (chart1.Series["Ozone"].Points.Count > 565)
+            if (chart1.Series["Ozone"].Points.Count > 432)
             {
                 chart1.Series["Ozone"].Points.RemoveAt(0);
                 chart1.ResetAutoValues();
             }        
-                data_tb.Text = Ozone + "," + temp + "," + flowrate + "," + DateNowfff; ;
-                i = 0;
-            }
-        }
+                data_tb.Text = "O: "+ Ozone + "\r\n" + "T: "+temp + "\r\n" + "FlowR: "+flowrate + "\r\n" + "Date: "+ "\r\n" + DateNowfff; 
+         }
+        
 
         private void stop_btn_Click(object sender, EventArgs e)
         {
@@ -233,6 +268,7 @@ namespace FOS_serial_port
             comboBox1.Enabled = true;
             comboBox2.Enabled = true;
             stop_btn.Enabled = false;
+            In_side = 0;
         }
 
         private void data_tb_TextChanged(object sender, EventArgs e)
@@ -267,7 +303,25 @@ namespace FOS_serial_port
 
         private void save_btn_Click(object sender, EventArgs e)
         {
-            Process.Start("notepad.exe", "DataForCsv.txt");
+            Process.Start("notepad.exe", pathSave + "/" + Archive);
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+           
+        
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            timer2.Interval = 300000; /// 300000=5 minutos
+            Console.WriteLine("Dentro Timer: " + DateTime.Now);
+            this.Invoke(new EventHandler(Showdata));
         }
     }
 }
+ 
+ 
